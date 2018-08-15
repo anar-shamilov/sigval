@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  db:
+    image: 3225/sigval_db
+    container_name: 'sigval-db'
+  app:
+    image: 3225/sigval_app
+    container_name: 'sigval-app'
+    depends_on: 
+      - db
+    links: 
+      - db
+  redmine:
+    image: 3225/sigval_redmine
+    ports:
+     - '3000:3000'
+    container_name: 'sigval-redmine'
+  proxy:
+    image: 3225/sigval_proxy
+    ports:
+      - '80:80'
+      - '443:443'
+    container_name: 'sigval-proxy'
+    depends_on:
+     - app
+     - redmine
+    links:
+     - app
+     - redmine
